@@ -32,42 +32,28 @@ export async function POST(req: Request) {
       name,
       email,
       phone,
-      messageLength: message.length
+      messageLength: message.length,
     });
 
+    // Send email using Resend
     const data = await resend.emails.send({
-      from: 'Contact Form <onboarding@resend.dev>',
-      to: ['your-email@example.com'], // Replace with your email
-      subject: 'New Contact Form Submission',
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Message:</strong> ${message}</p>
+      from: 'onboarding@resend.dev',
+      to: process.env.RESEND_TO_EMAIL || 'your-email@example.com',
+      subject: `New Contact Form Submission from ${name}`,
+      text: `
+        Name: ${name}
+        Email: ${email}
+        Phone: ${phone}
+        Message: ${message}
       `,
     });
 
     console.log('Email sent successfully:', data);
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true });
   } catch (error) {
-    // Log the full error details
-    console.error('Failed to send email:', {
-      error: error instanceof Error ? {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      } : error
-    });
-
-    // Return a more specific error message
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    console.error('Failed to send email:', error);
     return NextResponse.json(
-      { 
-        error: 'Failed to send email',
-        details: errorMessage,
-        timestamp: new Date().toISOString()
-      },
+      { error: 'Failed to send message' },
       { status: 500 }
     );
   }
