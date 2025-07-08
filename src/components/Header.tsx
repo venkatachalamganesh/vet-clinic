@@ -1,9 +1,16 @@
 import Link from 'next/link';
-import { PhoneIcon } from '@heroicons/react/24/solid';
 
 export default function Header() {
   return (
     <header className="fixed w-full bg-white shadow-md z-50">
+      <div className="bg-primary text-white py-2">
+        <div className="container mx-auto px-6 flex justify-between items-center text-sm">
+          <div className="flex items-center space-x-4">
+            <span>📞 847.286.2500</span>
+            <span>📍 3333 Beverly Road, Hoffman Estates, IL 60192</span>
+          </div>
+        </div>
+      </div>
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-2xl font-bold text-primary">
